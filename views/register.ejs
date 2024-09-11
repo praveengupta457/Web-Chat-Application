@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            z-index: 1; /* Ensure the form appears on top */
+        }
+
+        h2 {
+            text-align: center;
+            color: #151819;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"] {
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        p {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <form action="" method="POST" enctype="multipart/form-data">
+        <h2>Register</h2>
+        <input type="text" name="name" placeholder="Enter Name..." required>
+        <br>
+        <input type="email" name="email" placeholder="Enter Email..." required>
+        <br>
+        <input type="file" name="image" required>
+        <br>
+        <input type="password" name="password" placeholder="Enter Password..." required>
+        <br>
+        <input type="submit" value="Register">
+        <p>Already registered? <a href="/">Click here</a> to login.</p>
+    </form>
+
+    <% if (typeof message !== 'undefined') { %>
+        <p style="color: #3498db;"><%= message %></p>
+    <% } %>
+</body>
+</html>

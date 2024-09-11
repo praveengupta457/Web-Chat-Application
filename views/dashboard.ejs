@@ -1,0 +1,178 @@
+
+<%- include('layouts/header.ejs') %>
+
+<h2 class="mb-4">Welcome, <%= user.name %></h2>
+
+<div class="row">
+    <div class="col-md-3">
+         <ul class="list-group">
+                   <% 
+                      if(users.length >0){
+                        for(let i =0; i <users.length; i++ ){
+                        %>
+                        <li class="list-group-item  cursor-pointer user-list" data-id="<%= users[i][ '_id'] %>" >
+                          <img src="<%= 'http://localhost:3000/' + users[i]['image'] %>" alt="" width="40px" height="40px" style="border-radius: 50px;">
+
+                          <%= users[i]['name'] %>
+                        </li>
+                       <%
+                     }
+                   }
+                 %>
+          </ul>         
+    </div>
+    <div class="col-md-9">
+      
+      <div class="chat-section">
+        <div id="chat-container">
+          <ul id="imgmsg"></ul>
+          
+          </div>
+          <form action="" id="chat-form">
+            <input type="text" name="message" placeholder="Enter message" id="message" class="border">
+          <input type="submit" value="Send message" class="btn btn-primary">
+          <label for="file" id="fileLabel">Attach File</label>
+      <input type="file" id="file" name="image" accept="image/*" />
+      <button id="uploadBtn">Send File</button>
+            </form>
+          </div>
+      </div>
+</div>
+
+
+<script>
+  
+  var sender_id = '<%= user._id%>';
+  var reciever_id;
+  
+  var socket = io('/user-namespace',{
+    auth:{
+      token: '<%= user._id %>'
+    }
+  });
+
+  $(document).ready(function(){
+
+  $('.user-list').click(function(){
+    
+   var userId= $(this).attr('data-id');
+   reciever_id = userId;
+  $('.start-head').hide();
+  $('.chat-section').show();
+
+  socket.emit('availableChat',{sender_id:sender_id,reciever_id:reciever_id})
+
+  });
+
+  });
+
+  //chat save
+
+  $('#chat-form').submit(function(event){
+    event.preventDefault();
+   var message= $('#message').val();
+
+   $.ajax({
+    url:'/save-chat',
+    type:'POST',
+
+    data:{sender_id:sender_id,reciever_id:reciever_id, message:message},
+
+    success:function(response){
+      if(response.success){
+        console.log(response.data.message);
+        $('#message').val("");
+
+        let chat= response.data.message;
+        let html = `
+        <div class="initial">
+                <h4>
+                  `+chat+`
+                </h4>
+        </div>
+        `;
+        $('#chat-container').append(html);
+        
+        socket.emit('newChat',response.data);
+        scroll();
+
+      }else{
+        alert(data.msg)
+      }
+    }
+   });
+  });
+
+       // Listen for image messages
+  
+      socket.on('image', (data) => {
+        $('#imgmsg').append($('<li>').html(`<img src="${data}" width="200" height="200" />`));
+          scroll();
+      });
+
+  socket.on('loadNewChat', (data) => {
+    if (sender_id == data.reciever_id && reciever_id == data.sender_id) {
+        let html = `
+            <div class="opposite">
+                <h4>${data.message}</h4>
+            </div>
+        `;
+        $('#chat-container').append(html);
+
+    }
+    scroll();
+
+});
+
+//load old chat
+
+socket.on('loadChats',(data)=>{
+   $('#chat-container').html('');
+   var chats = data.chats;
+   var html= "";
+   for(let i=0;i<chats.length; i++){
+         let addClass = "";
+         if(chats[i]['sender_id'] == sender_id){
+          addClass = "initial"
+         }else{
+          addClass ="opposite";
+         }
+         html+=`
+         <div class="`+addClass+`">
+                <h4>${chats[i]['message']}</h4>
+            </div>
+         `;
+   }
+
+   $('#chat-container').append(html);
+   scroll();
+});
+
+    // Upload image
+    $('#uploadBtn').click(() => {
+        const fileInput = document.getElementById('file');
+        const file = fileInput.files[0];
+        if (file) {
+          const formData = new FormData();
+          formData.append('image', file);
+          $.ajax({
+            url: '/upload',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: () => {
+              console.log('Image uploaded successfully');
+            },
+          });
+        }
+      });
+
+function scroll(){
+  $('#chat-container').animate({
+    scrollTop:$('#chat-container').offset().top + $('#chat-container')[0].scrollHeight
+  },0);
+}
+  </script> 
+
+<%- include('layouts/footer.ejs') %>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #2a67a1;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #5c75a8;
+        }
+
+        p {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <% if (typeof message !== 'undefined') { %>
+        <h3 style="color:red"><%= message %></h3>
+    <% } %>
+
+    <form action="" method="POST">
+        <h2>Login</h2>
+        <input type="email" name="email" placeholder="Enter Email.." required>
+        <br>
+        <input type="password" name="password" placeholder="Enter Password.." required>
+        <br>
+        <input type="submit" value="Login">
+        <p>Didn't register? <a href="/register">Click here</a> to register.</p>
+    </form>
+</body>
+</html>

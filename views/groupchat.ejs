@@ -1,0 +1,84 @@
+<%- include('layouts/header.ejs') %>
+
+<h2 class="mb-4"> Group</h2>
+
+<div class="container"> 
+<!-- Button trigger modal -->
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#grpmessage">
+    Create Group
+  </button>
+    <% 
+      if(typeof message !== 'undefined'){
+        %>
+    <p style="color:green;"><%= message %></p>
+        <%
+      }
+    %>
+
+    <table class="table mt=4">
+      
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Limit</th>
+          <th>Members</th>
+          <th>Actions</th>
+          </tr></thead>
+          <tbody>
+            <%
+            if(groups.length>0){
+                                
+                         for(let i = 0; i<groups.length; i++){
+                          %>
+                          <tr>
+                            <td><% i+1 %> </td>
+                            <img src="http://localhost:3000/<%= groups[i]['image'] %>" alt="" width="120px" height="120px">
+                            <td> <%= groups[i]['name'] %></td>
+                            <td> <%= groups[i]['limit'] %></td>
+                            <td> <a href="">Members</a></td>
+
+                            </tr>
+                          <%
+                    </groups.length>
+                         }
+                    else{
+                      <tr><td>NO data</td></tr>
+                    }
+                   }
+            %>
+          </tbody>
+          
+          </table>
+
+  <!-- Modal -->
+  <div class="modal fade" id="grpmessage" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenter">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="" enctype="multipart/form-data" method="post">
+        <div class="modal-body">
+          <input type="text" name="name" placeholder="enter group name" required class="w-100 mb-2">
+          <input type="text" name="image"  required class="w-100">
+          <input type="number" min="1" placeholder="enter user limit" name="limit"  required class="w-100 mb-2">
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('layouts/footer.ejs') %>
